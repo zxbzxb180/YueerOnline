@@ -28,25 +28,26 @@
 
                     <div class="personal">
                         <dl class="user fr">
-                            <dd>{{ request.user.username }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
+                            <dd>{{ request.user.nick_name }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
                             <dt><img width="20" height="20" src="/uploads/avatar/default_big.png"/></dt>
                         </dl>
                         <div class="userdetail">
                             <dl>
                                 <dt><img width="80" height="80" src="/uploads/avatar/default_big.png"/></dt>
                                 <dd>
-                                    <h2>{% ifequal request.user.is_staff 0 %}普通用户{% else %}管理员{% endifequal %}</h2>
+                                    <h2>{{ request.user.nick_name }}</h2>
+                                    <p>{% ifequal request.user.is_staff 0 %}普通用户{% else %}管理员{% endifequal %}</p>
                                     <p>{{ request.user.email }}</p>
                                 </dd>
                             </dl>
                             <div class="btn">
-                                <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
-                                <a class="fr" href="/user/logout/">退出</a>
+                                <a class="personcenter fl" href="{% url 'users:user_info' %}">进入个人中心</a>
+                                <a class="fr" href="{% url 'logout' %}">退出</a>
                             </div>
                         </div>
                     </div>
-                    <a href="usercenter-message.html">
-                        <div class="msg-num">20</div>
+                    <a href="{% url 'users:mymessage' %}">
+                        <div class="msg-num"><span id="MsgNum">{{ request.user.unread_nums }}</span></div>
                     </a>
 
                 </div>
@@ -117,9 +118,9 @@
 <!--sidebar start-->
 <section>
     <ul class="sidebar">
-        <li class="qq">
-            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>
-        </li>
+{#        <li class="qq">#}
+{#            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>#}
+{#        </li>#}
         <li class="totop"></li>
     </ul>
 </section>

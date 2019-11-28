@@ -11,6 +11,7 @@ class Course(models.Model):
     name = models.CharField(max_length=50, verbose_name='课程名称')
     desc = models.CharField(max_length=300, verbose_name='课程描述')
     detail = models.TextField(verbose_name='课程详情')
+    is_banner = models.BooleanField(default=False, verbose_name='是否轮播')
     tag = models.CharField(max_length=10, default='', verbose_name='课程标签')
     degree = models.CharField(choices=(('cj', '初级'), ('zj', '中级'), ('gj', '高级')), max_length=2, verbose_name='课程难度')
     category = models.CharField(max_length=20, verbose_name='课程类别', default='乐器')

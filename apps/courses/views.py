@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
+from django.db.models import Q
 
 from .models import Course, CourseResource, Video
 from operation.models import UserFavorite, CourseComments, UserCourse
@@ -18,6 +19,12 @@ class CourseListView(View):
     def get(self, request):
         all_courses = Course.objects.all().order_by('-add_time')
         hot_courses = Course.objects.all().order_by('-click_nums')[:3]
+
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 用 **__icontains来做类似like的操作
+            all_courses = all_courses.filter(Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords)|Q(detail__icontains=search_keywords))
+
 
         # 排序
         sort = request.GET.get('sort', '')
@@ -43,7 +50,7 @@ class CourseListView(View):
             'hot_courses': hot_courses,
             'courses': courses,
             'sort': sort,
-            'type': 'course',
+            #'type': 'course',
         })
 
 
@@ -89,6 +96,7 @@ class CourseInfoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         course = Course.objects.get(id=course_id)
         user_courses = UserCourse.objects.filter(course=course)
+
         # 获取学过该课程的所有学生的id
         user_ids = [user_course.user.id for user_course in user_courses]
         # 获取上述所有学生学的所有课程

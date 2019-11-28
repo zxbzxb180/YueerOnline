@@ -27,25 +27,28 @@
 
                     <div class="personal">
                         <dl class="user fr">
-                            <dd>{{ request.user.username }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
-                            <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                            <dd>{{ request.user.nick_name }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
+                            <a href="{% url 'users:user_info' %}">
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                            </a>
                         </dl>
                         <div class="userdetail">
                             <dl>
                                 <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                                 <dd>
-                                    <h2>{% ifequal request.user.is_staff 0 %}普通用户{% else %}管理员{% endifequal %}</h2>
+                                    <h2>{{ request.user.nick_name }}</h2>
+                                    <p>{% ifequal request.user.is_staff 0 %}普通用户{% else %}管理员{% endifequal %}</p>
                                     <p>{{ request.user.email }}</p>
                                 </dd>
                             </dl>
                             <div class="btn">
-                                <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
-                                <a class="fr" href="/user/logout/">退出</a>
+                                <a class="personcenter fl" href="{% url 'users:user_info' %}">进入个人中心</a>
+                                <a class="fr" href="{% url 'logout' %}">退出</a>
                             </div>
                         </div>
                     </div>
-                    <a href="usercenter-message.html">
-                        <div class="msg-num">20</div>
+                    <a href="{% url 'users:mymessage' %}">
+                        <div class="msg-num"><span id="MsgNum">{{ request.user.unread_nums }}</span></div>
                     </a>
 
                 </div>
@@ -67,14 +70,13 @@
                     <a href="/"><img class="fl" src="/static/images/logo.jpg"/></a>
                     <div class="searchbox fr">
                         <div class="selectContainer fl">
-                            <span class="selectOption" id="jsSelectOption" data-value="group">
+                            <span class="selectOption" id="jsSelectOption" data-value="course">
                                 公开课
                             </span>
                             <ul class="selectMenu" id="jsSelectMenu">
-                                <li data-value="group">公开课</li>
-                                <li data-value="company">课程机构</li>
-                                <li data-value="hk">授课老师</li>
-                                <li data-value="knowledge">文章</li>
+                                <li data-value="course">公开课</li>
+                                <li data-value="org">课程机构</li>
+                                <li data-value="teacher">授课老师</li>
                             </ul>
                         </div>
                         <input id="search_keywords" class="fl" type="text" value="" placeholder="请输入搜索内容"/>
@@ -88,14 +90,14 @@
 				<div class="nav">
 					<div class="wp">
 						<ul>
-							<li><a href="{% url 'index' %}">首页</a></li>
-							<li class="{% ifequal type 'course' %}active{% endifequal %}">
+							<li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'index' %}">首页</a></li>
+							<li class="{% if request.path|slice:'7' == '/course' %}active{% endif %}">
                                 <a href="{% url 'course:course_list' %}">公开课<img class="hot" src="/static/images/nav_hot.png"></a>
 							</li>
-							<li class="{% ifequal type 'teacher' %}active{% endifequal %}">
+							<li class="{% if request.path|slice:'12' == '/org/teacher' %}active{% endif %}">
 								<a href="{% url 'org:teacher_list' %}">授课教师</a>
 							</li>
-							<li class="{% ifequal type 'org' %}active{% endifequal %}"><a href="{% url 'org:org_list' %}">授课机构</a></li>
+							<li class="{% if request.path|slice:'9' == '/org/list' %}active{% endif %}"><a href="{% url 'org:org_list' %}">授课机构</a></li>
 						</ul>
 					</div>
 				</div>
@@ -123,23 +125,23 @@
 			<div class="wp">
 				<ul class="cont">
 					<li class="logo"><a href=""><img src="/static/images/footlogo.png"/></a></li>
-					<li class="code"><img src="/static/images/code.jpg"/><p class="center">扫描关注微信</p></li>
+					<li class="code"><img src="/static/images/code.jpg"/><p class="center">扫描QQ二维码</p></li>
 					<li class="third"><img class="fl" src="/static/images/tell.png"/><p class="tell">33333333</p><p class="time">周一至周日 9:00-18:00</p></li>
 				</ul>
 
 			</div>
 			<p class="line"></p>
 			<div class="wp clear">
-                <span class="fl">? 2016 www.muxue.com 慕学网-在线学习交流平台 保留所有权利</span>
-                <span class="fr">copyright ? 2016 ICP备案证书号：蜀ICP备xxxxx号-1</span>
+                <span class="fl">? 2019 www.yueeronline.com 悦耳网-在线学习交流平台 保留所有权利</span>
+                <span class="fr">copyright ? 2019 ICP备案证书号：蜀ICP备xxxxx号-1</span>
 			</div>
 		</div>
 	</footer>
 <section>
     <ul class="sidebar">
-        <li class="qq">
-            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>
-        </li>
+{#        <li class="qq">#}
+{#            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>#}
+{#        </li>#}
         <li class="totop"></li>
     </ul>
 </section>

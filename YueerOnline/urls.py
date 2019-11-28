@@ -20,6 +20,8 @@ from django.views.generic import TemplateView
 from django.views.static import serve
 from .settings import MEDIA_ROOT
 
+# from .settings import STATIC_ROOT
+
 import xadmin
 
 from users.views import *
@@ -29,10 +31,11 @@ urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
 
     # 首页
-    url('^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url('^$', IndexView.as_view(), name='index'),
 
     # 登录注册
     url('^login/$', LoginView.as_view(), name='login'),
+    url('^logout/$', LogoutView.as_view(), name='logout'),
     url('^register/$', RegisterView.as_view(), name='register'),
     url('^captcha/', include('captcha.urls')),
     url('^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='user_active'),
@@ -49,5 +52,18 @@ urlpatterns = [
     # 课程讲师url配置
     url('^teacher/', include('organization.urls', namespace='org')),
 
-    url('^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT})
+    # 用户中心url配置
+    url('^users/', include('users.urls', namespace='users')),
+
+    # 上传的文件的url
+    url('^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+
+    # DEBUG=False时，需要自己配置静态文件的url
+    # url('^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT})
 ]
+
+# 全局404页面配置
+handler404 = 'users.views.page_not_found'
+
+# 全局500页面配置
+handler500 = 'users.views.page_error'

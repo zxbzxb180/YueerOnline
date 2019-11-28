@@ -52,6 +52,9 @@ class UserMessage(models.Model):
         verbose_name = '用户消息'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return '消息'
+
 
 class UserCourse(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name='用户')

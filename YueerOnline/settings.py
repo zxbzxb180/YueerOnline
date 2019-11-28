@@ -140,7 +140,6 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
@@ -149,10 +148,11 @@ EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'yueeronline@sina.com'
 #EMAIL_HOST_PASSWORD = 'cx6222580'
-EMAIL_HOST_PASSWORD = '59a0abe68434d4e9'
+EMAIL_HOST_PASSWORD = '339386240bf7d370'
 EMAIL_USE_TLS = False
 EMAIL_FROM = 'yueeronline@sina.com'
 
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')

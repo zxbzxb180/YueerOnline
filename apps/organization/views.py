@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
+from django.db.models import Q
 
 from .models import CourseOrg, CityDict, Teacher
 from .forms import UserAskForm
@@ -25,6 +26,13 @@ class OrgView(View):
 
         # 热门机构
         hot_orgs = all_orgs.order_by('-click_nums')[:4]
+
+        # 机构搜索
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 用 **__icontains来做类似like的操作
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords))
 
         # 城市筛选
         city_id = request.GET.get('city', '')
@@ -65,7 +73,7 @@ class OrgView(View):
             'category': category,
             'hot_orgs': hot_orgs,
             'sort': sort,
-            'type': 'org',
+            #'type': 'org',
         })
 
 
@@ -89,6 +97,8 @@ class OrgHomeView(View):
     def get(self, request, org_id):
         current_page = 'home'
         course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
 
         has_fav = False
         if request.user.is_authenticated():
@@ -187,8 +197,29 @@ class AddFavView(View):
 
         exit_records = UserFavorite.objects.filter(user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
         if exit_records:
-            #如记录已经存在，则表示用户取消收藏
+            # 如记录已经存在，则表示用户取消收藏
             exit_records.delete()
+
+            # 取消收藏时，收藏数减1
+            if int(fav_type == 1):
+                course = Course.objects.get(id=int(fav_id))
+                course.fav_nums -= 1
+                if course.fav_nums < 0:
+                    course.fav_nums = 0
+                course.save()
+            elif int(fav_type == 2):
+                course_org = CourseOrg.objects.get(id=int(fav_id))
+                course_org.fav_nums -= 1
+                if course_org.fav_nums < 0:
+                    course_org.fav_nums = 0
+                course_org.save()
+            elif int(fav_type == 3):
+                teacher = Teacher.objects.get(id=int(fav_id))
+                teacher.fav_nums -= 1
+                if teacher.fav_nums < 0:
+                    teacher.fav_nums = 0
+                teacher.save()
+
             return HttpResponse('{"status":"success", "msg":"收藏"}', content_type='application/json')
         else:
             user_fav = UserFavorite()
@@ -197,6 +228,20 @@ class AddFavView(View):
                 user_fav.fav_id = fav_id
                 user_fav.fav_type = fav_type
                 user_fav.save()
+
+                # 添加收藏时，收藏数加1
+                if int(fav_type == 1):
+                    course = Course.objects.get(id=int(fav_id))
+                    course.fav_nums += 1
+                    course.save()
+                elif int(fav_type == 2):
+                    course_org = CourseOrg.objects.get(id=int(fav_id))
+                    course_org.fav_nums += 1
+                    course_org.save()
+                elif int(fav_type == 3):
+                    teacher = Teacher.objects.get(id=int(fav_id))
+                    teacher.fav_nums += 1
+                    teacher.save()
                 return HttpResponse('{"status":"success", "msg":"已收藏"}', content_type='application/json')
 
             else:
@@ -211,6 +256,12 @@ class TeacherListView(View):
         all_teachers = Teacher.objects.all()
         teacher_nums = all_teachers.count()
         sorted_teachers = all_teachers.order_by('-click_nums')[:5]
+
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 用 **__icontains来做类似like的操作
+            all_teachers = all_teachers.filter(
+                Q(name__icontains=search_keywords) | Q(work_org__icontains=search_keywords) | Q(work_position__icontains=search_keywords))
 
         # 排序
         sort = request.GET.get('sort', '')
@@ -230,7 +281,7 @@ class TeacherListView(View):
         return render(request, 'teachers-list.html', {
             'teachers': teachers,
             'sorted_teachers': sorted_teachers,
-            'type': 'teacher',
+            #'type': 'teacher',
             'sort': sort,
             'teacher_nums': teacher_nums,
         })
@@ -242,6 +293,8 @@ class TeacherDetailView(View):
     """
     def get(self, request, teacher_id):
         teacher = Teacher.objects.get(id=int(teacher_id))
+        teacher.click_nums += 1
+        teacher.save()
         teacher_courses = teacher.course_set.all()
         all_teachers = Teacher.objects.all()
         sorted_teachers = all_teachers.order_by('-click_nums')[:5]
