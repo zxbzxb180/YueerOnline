@@ -31,6 +31,7 @@ class CustomBackend(ModelBackend):
 
 
 class RegisterView(View):
+    """用户注册"""
     def get(self, request):
         all_banners = Banner.objects.all().order_by('index')
         register_form = RegisterForm()
@@ -122,6 +123,9 @@ class LogoutView(View):
 
 
 class ForgetPwdView(View):
+    """
+    忘记密码
+    """
     def get(self, request):
         forget_form = ForgetForm()
         return render(request, 'forgetpwd.html', {'forget_form': forget_form})
