@@ -14,7 +14,7 @@ class Course(models.Model):
     is_banner = models.BooleanField(default=False, verbose_name='是否轮播')
     tag = models.CharField(max_length=10, default='', verbose_name='课程标签')
     degree = models.CharField(choices=(('cj', '初级'), ('zj', '中级'), ('gj', '高级')), max_length=2, verbose_name='课程难度')
-    category = models.CharField(max_length=20, verbose_name='课程类别', default='乐器')
+    category = models.CharField(choices=(('cg', '唱歌'), ('yq', '乐器')), max_length=20, verbose_name='课程类别', default='yq')
     learn_time = models.IntegerField(default=0, verbose_name='课程时长(分钟)')
     teacher = models.ForeignKey(Teacher, null=True, blank=True, verbose_name='讲师')
     students = models.IntegerField(default=0, verbose_name='学习人数')

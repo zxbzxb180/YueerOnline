@@ -307,7 +307,7 @@ class MyFavTeacherView(LoginRequiredMixin, View):
 
 class MyFavCourseView(LoginRequiredMixin, View):
     """
-    我的收藏————课程讲师
+    我的收藏————课程
     """
     def get(self,request):
         course_list = []

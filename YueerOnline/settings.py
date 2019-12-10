@@ -80,7 +80,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 #让html中的{{ MEDIA_URL }}有效
-                'django.core.context_processors.media',
+                'django.template.context_processors.media',
             ],
         },
     },

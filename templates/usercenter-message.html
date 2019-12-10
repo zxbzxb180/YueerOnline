@@ -28,22 +28,22 @@
 		<div class="personal_des permessage">
 			<div class="head">
 				<ul class="tab_header messagehead">
-					<li class="active"><a href="/users/message/">个人消息</a> </li>
-					<li ><a href="/users/message/?type=sys">系统通知</a></li>
+					<li class="active"><a href="{% url 'users:mymessage' %}">个人消息</a> </li>
+{#					<li ><a href="/users/message/?type=sys">系统通知</a></li>#}
 				</ul>
 
-				<ul class="fr option">
-					<li><label><input class="selectall" type="checkbox"/> 全选</label></li>
-					<li class="delete jsDeleteMsg"></li>
-				</ul>
+{#				<ul class="fr option">#}
+{#					<li><label><input class="selectall" type="checkbox"/> 全选</label></li>#}
+{#					<li class="delete jsDeleteMsg"></li>#}
+{#				</ul>#}
 
 			</div>
 			<div class="messagelist">
                 {% for message in messages.object_list %}
                     <div class="messages">
-                        <label class="fl">
-                            <input name="my_message_id" class="checkbox" type="checkbox" data-value="199"/>
-                        </label>
+{#                        <label class="fl">#}
+{#                            <input name="my_message_id" class="checkbox" type="checkbox" data-value="199"/>#}
+{#                        </label>#}
 
                         <div class="fr">
                             <div class="top"><span class="fl time">{{ message.add_time }}</span><span class="fr btn foldbtn"></span></div>
@@ -55,10 +55,10 @@
                 {% endfor %}
 			</div>
 
-                <ul class="option fl">
-                    <li><label><input class="selectall" type="checkbox"/> 全选</label></li>
-                    <li class="delete jsDeleteMsg"></li>
-                </ul>
+{#                <ul class="option fl">#}
+{#                    <li><label><input class="selectall" type="checkbox"/> 全选</label></li>#}
+{#                    <li class="delete jsDeleteMsg"></li>#}
+{#                </ul>#}
 
 			<div class="pageturn pagerright">
                 <ul class="pagelist">

@@ -7,18 +7,21 @@ class CityDictAdmin(object):
     list_display = ['name', 'desc', 'add_time']
     search_fields = ['name', 'desc']
     list_filter = ['name', 'desc', 'add_time']
+    model_icon = 'fa fa-map-marker'
 
 
 class CourseOrgAdmin(object):
     list_display = ['name', 'desc', 'click_nums', 'fav_nums', 'image', 'address', 'city', 'add_time']
     search_fields = ['name', 'desc', 'click_nums', 'fav_nums', 'image', 'address', 'city']
     list_filter = ['name', 'desc', 'click_nums', 'fav_nums', 'image', 'address', 'city', 'add_time']
+    model_icon = 'fa fa-home'
 
 
 class TeacherAdmin(object):
     list_display = ['org', 'name', 'teach_years', 'work_org', 'fav_nums', 'work_position', 'points', 'click_nums', 'fav_nums', 'add_time']
     search_fields = ['org', 'name', 'teach_years', 'work_org', 'fav_nums', 'work_position', 'points', 'click_nums', 'fav_nums']
     list_filter = ['org', 'name', 'teach_years', 'work_org', 'fav_nums', 'work_position', 'points', 'click_nums', 'fav_nums', 'add_time']
+    model_icon = 'fa fa-users'
 
 
 xadmin.site.register(CityDict, CityDictAdmin)

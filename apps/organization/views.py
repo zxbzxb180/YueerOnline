@@ -201,19 +201,19 @@ class AddFavView(View):
             exit_records.delete()
 
             # 取消收藏时，收藏数减1
-            if int(fav_type == 1):
+            if (int(fav_type) == 1):
                 course = Course.objects.get(id=int(fav_id))
                 course.fav_nums -= 1
                 if course.fav_nums < 0:
                     course.fav_nums = 0
                 course.save()
-            elif int(fav_type == 2):
+            elif (int(fav_type) == 2):
                 course_org = CourseOrg.objects.get(id=int(fav_id))
                 course_org.fav_nums -= 1
                 if course_org.fav_nums < 0:
                     course_org.fav_nums = 0
                 course_org.save()
-            elif int(fav_type == 3):
+            elif (int(fav_type) == 3):
                 teacher = Teacher.objects.get(id=int(fav_id))
                 teacher.fav_nums -= 1
                 if teacher.fav_nums < 0:
@@ -230,15 +230,15 @@ class AddFavView(View):
                 user_fav.save()
 
                 # 添加收藏时，收藏数加1
-                if int(fav_type == 1):
+                if (int(fav_type) == 1):
                     course = Course.objects.get(id=int(fav_id))
                     course.fav_nums += 1
                     course.save()
-                elif int(fav_type == 2):
+                elif (int(fav_type) == 2):
                     course_org = CourseOrg.objects.get(id=int(fav_id))
                     course_org.fav_nums += 1
                     course_org.save()
-                elif int(fav_type == 3):
+                elif (int(fav_type) == 3):
                     teacher = Teacher.objects.get(id=int(fav_id))
                     teacher.fav_nums += 1
                     teacher.save()
