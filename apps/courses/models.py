@@ -1,4 +1,5 @@
 from datetime import datetime
+from DjangoUeditor.models import UEditorField
 
 from django.db import models
 
@@ -10,7 +11,7 @@ class Course(models.Model):
     course_org = models.ForeignKey(CourseOrg, verbose_name='课程机构', null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name='课程名称')
     desc = models.CharField(max_length=300, verbose_name='课程描述')
-    detail = models.TextField(verbose_name='课程详情')
+    detail = UEditorField(verbose_name='课程详情', width=600, height=300, imagePath="courses/ueditor/", filePath="courses/ueditor/", default='')
     is_banner = models.BooleanField(default=False, verbose_name='是否轮播')
     tag = models.CharField(max_length=10, default='', verbose_name='课程标签')
     degree = models.CharField(choices=(('cj', '初级'), ('zj', '中级'), ('gj', '高级')), max_length=2, verbose_name='课程难度')
@@ -43,6 +44,13 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = '轮播课程'
+        verbose_name_plural = verbose_name
+        proxy = True
 
 
 class Lesson(models.Model):

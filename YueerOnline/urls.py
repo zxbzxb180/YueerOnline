@@ -60,6 +60,9 @@ urlpatterns = [
 
     # DEBUG=False时，需要自己配置静态文件的url
     # url('^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT})
+
+    # 富文本相关url
+    url(r'^ueditor/', include('DjangoUeditor.urls')),
 ]
 
 # 全局404页面配置

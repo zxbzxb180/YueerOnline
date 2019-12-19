@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 
 from .models import Course, CourseResource, Video
+from organization.models import CourseOrg
 from operation.models import UserFavorite, CourseComments, UserCourse
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -113,6 +114,9 @@ class CourseInfoView(LoginRequiredMixin, View):
             student_course.course = course
             student_course.user = request.user
             course.students += 1
+            org = CourseOrg.objects.get(id=course.course_org_id)
+            org.students += 1
+            org.save()
             course.save()
             student_course.save()
 
