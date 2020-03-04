@@ -1,0 +1,85 @@
+{% extends 'usercenter-base.html' %}
+{% load staticfiles %}
+{% block title %}教师上传课程 - 悦耳网{% endblock %}
+
+{% block custom_css %}{% endblock %}
+{% block custom_js %}{% endblock %}
+
+{% block custom_bread %}
+    <section>
+	<div class="wp">
+		<ul  class="crumbs">
+			<li><a href="{% url 'index' %}">首页</a>></li>
+			<li>教师上传课程</li>
+		</ul>
+	</div>
+</section>
+{% endblock %}
+
+{% block add %}
+<h1>上传课程</h1>
+{% endblock %}
+
+{% block lift_content %}
+<div class="wp list personal_list">
+	<div class="left">
+        <ul>
+            <li class="active2"><a href="">上传课程</a></li>
+        </ul>
+	</div>
+{% endblock %}
+
+{% block right_content %}
+    <div class="right">
+		<div class="personal_des ">
+			<div class="head" style="border:1px solid #eaeaea;">
+				<h1>填写课程信息</h1>
+			</div>
+			<div class="inforcon">
+
+            <div style="width:700px;">
+				<form  method="post" autocomplete="off" action="{% url 'add_course' %}" enctype="multipart/form-data">
+					<div class="right">
+						<li>讲师昵称：
+                           <input class="borderno" type="text" name="teacher" id="teacher" readonly="readonly" value="{{ request.user.nick_name }}" maxlength="10">
+                        </li>
+                        <li>课程名称：
+                           <input type="text" name="name" id="name"  placeholder="请输入课程名称..." maxlength="50">
+                        </li>
+                        <li>课程机构：
+                           <input type="text" name="course_org" id="course_org"  placeholder="请输入课程机构(机构/高校/个人)..." maxlength="50">
+                        </li>
+                        <li>课程描述：
+                           <input type="text" name="desc" id="desc"  placeholder="请输入课程描述..." maxlength="300">
+                        </li>
+						<li>课程时长：
+                            <input type="text" name="learn_time" id="learn_time" placeholder="请输入课程总时长(分)..." maxlength="100">
+                        </li>
+						<li>课程须知：
+                            <input type="text" name="need_know" id="need_know" placeholder="请输入课程须知..." maxlength="300">
+                        </li>
+                        <li>老师的话：
+                        	<input type="text" name="teacher_tell" id="teacher_tell" placeholder="请输入老师的话..." maxlength="300"/>
+                    	</li>
+                        <li>课程封面:
+                            <input type="file" name="image" id="course_image">
+                        </li>
+                        <li>课程视频:
+                            <input type="file" name="course" id="course_video">
+                        </li>
+                        <p style="color:red">*课程视频文件请按照"课程名-章节名"命名，并将所有课程视频打包命名为"讲师名-课程名"</p>
+
+
+                        <li class="button heibtn">
+							<input type="submit" value="上传">
+						</li>
+                    <input type='hidden' name='csrfmiddlewaretoken' value='sJcSi17mvC0dE06Qj4LH2i17uic2JOgy' />
+                    </div>
+                {% csrf_token %}
+				</form>
+            </div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

@@ -3,6 +3,7 @@ import xadmin
 from .models import *
 from organization.models import CourseOrg
 
+
 class VideoInline(object):
     model = Video
     extra = 0

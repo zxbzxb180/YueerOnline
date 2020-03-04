@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 from django.views.static import serve
 from .settings import MEDIA_ROOT
 
-# from .settings import STATIC_ROOT
+from .settings import STATIC_ROOT
 
 import xadmin
 
@@ -59,10 +59,13 @@ urlpatterns = [
     url('^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 
     # DEBUG=False时，需要自己配置静态文件的url
-    # url('^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT})
+    url('^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 
     # 富文本相关url
     url(r'^ueditor/', include('DjangoUeditor.urls')),
+
+    # 教师上传课程
+    url('^add_course/$', AddCourseView.as_view(), name='add_course'),
 ]
 
 # 全局404页面配置

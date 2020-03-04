@@ -10,7 +10,7 @@ from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseRedirect
 
 from utils.email_send import send_register_email
-from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm, AddCourseForm
 from .models import UserProfile, EmailVerifyRecord, Banner
 from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
@@ -53,13 +53,14 @@ class RegisterView(View):
             user_profile.password = make_password(password=pass_word)
             user_profile.is_active = False
 
+            user_profile.save()
+
             # 写入欢迎注册消息
             user_message = UserMessage()
             user_message.user = user_profile.id
             user_message.message = '欢迎注册悦耳在线网'
             user_message.save()
 
-            user_profile.save()
             send_register_email(user_name, 'register')
             return render(request, 'login.html')
         else:
@@ -68,7 +69,7 @@ class RegisterView(View):
 
 class ActiveUserView(View):
     def get(self, request, active_code):
-        all_record = EmailVerifyRecord.objects.filter(code=active_code)#active_code有可能重复，因为是随机生成
+        all_record = EmailVerifyRecord.objects.filter(code=active_code)  # active_code有可能重复，因为是随机生成
         if all_record:
             for record in all_record:
                 if record.is_used is False:
@@ -128,7 +129,9 @@ class ForgetPwdView(View):
     """
     def get(self, request):
         forget_form = ForgetForm()
-        return render(request, 'forgetpwd.html', {'forget_form': forget_form})
+        all_banners = Banner.objects.all().order_by('index')
+        return render(request, 'forgetpwd.html', {'forget_form': forget_form,
+                                                  'all_banners': all_banners})
 
     def post(self, request):
         forget_form = ForgetForm(request.POST)
@@ -326,7 +329,7 @@ class MyMessageView(LoginRequiredMixin, View):
     我的消息页面
     """
     def get(self, request):
-        all_message = UserMessage.objects.all().order_by('-add_time')
+        all_message = UserMessage.objects.filter(user=request.user.id).order_by('-add_time')
 
         # 用户进入消息页面后，把所有消息置为已读
         all_unread_messages = UserMessage.objects.filter(user=request.user.id, is_read=False)
@@ -367,6 +370,26 @@ class IndexView(View):
         })
 
 
+class AddCourseView(View):
+    """
+    教师上传课程
+    """
+    def get(self, request):
+        if request.user.is_teacher == 0:
+            return render(request, '403.html')
+        else:
+            return render(request, 'add_course.html')
+
+    def post(self, request):
+        add_course_form = AddCourseForm(request.POST, request.FILES)
+        if add_course_form.is_valid():
+            add_course_form.save()
+            return HttpResponse('<h>课程已上传，审核通过后将自动添加！</h><p><a href="">返回</a></p>')
+        else:
+            return HttpResponse('<h>课程信息有误，请重新填写！</h><p><a href="">返回</a></p>')
+            # return render(request, 'add_course.html', {"add_course_form": add_course_form})
+
+
 # 全局404处理函数
 def page_not_found(request):
     from django.shortcuts import render_to_response
@@ -375,7 +398,7 @@ def page_not_found(request):
     return response
 
 
-# 全局404处理函数
+# 全局500处理函数
 def page_error(request):
     from django.shortcuts import render_to_response
     response = render_to_response('500.html', {})

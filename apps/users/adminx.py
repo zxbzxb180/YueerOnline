@@ -21,6 +21,7 @@ class EmailVerifyRecordAdmin(object):
     list_filter = ['code', 'email', 'send_type', 'send_time']
     model_icon = 'fa fa-envelope'
 
+
 class BannerAdmin(object):
     list_display = ['title', 'image', 'url', 'index', 'add_time']
     search_fields = ['title', 'image', 'url', 'index']
@@ -28,10 +29,19 @@ class BannerAdmin(object):
     model_icon = 'fa fa-picture-o'
 
 
+class AddCourseAdmin(object):
+    list_display = ['name', 'desc', 'teacher', 'course_org', 'image', 'course', 'need_know', 'teacher_tell', 'learn_time', 'is_add', 'add_time']
+    search_fields = ['name', 'desc', 'teacher', 'course_org', 'image', 'course', 'need_know', 'teacher_tell', 'learn_time', 'is_add']
+    list_filter = ['name', 'desc', 'teacher', 'course_org', 'image', 'course', 'need_know', 'teacher_tell', 'learn_time', 'is_add', 'add_time']
+    # 只读
+    readonly_fields = ['name', 'desc', 'teacher', 'course_org', 'image', 'course', 'need_know', 'teacher_tell', 'learn_time', 'add_time']
+
+
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 xadmin.site.register(Banner, BannerAdmin)
+xadmin.site.register(AddCourse, AddCourseAdmin)
 
-#主题
+# 主题
 xadmin.site.register(views.BaseAdminView, BaseSetting)
-#站头/站脚
+# 站头/站脚
 xadmin.site.register(views.CommAdminView, GlobalSetting)

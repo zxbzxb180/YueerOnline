@@ -36,7 +36,15 @@
                                 <dt><img width="80" height="80" src="/uploads/avatar/default_big.png"/></dt>
                                 <dd>
                                     <h2>{{ request.user.nick_name }}</h2>
-                                    <p>{% ifequal request.user.is_staff 0 %}普通用户{% else %}管理员{% endifequal %}</p>
+                                    <p>{% ifequal request.user.is_staff 0 %}
+                                            {% ifequal request.user.is_teacher 0 %}
+                                                普通用户
+                                            {% else %}
+                                                讲师
+                                            {% endifequal %}
+                                        {% else %}
+                                            管理员
+                                        {% endifequal %}</p>
                                     <p>{{ request.user.email }}</p>
                                 </dd>
                             </dl>

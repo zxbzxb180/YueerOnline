@@ -42,7 +42,15 @@
                                 <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                                 <dd>
                                     <h2>{{ request.user.nick_name }}</h2>
-                                    <p>{% ifequal request.user.is_staff 0 %}普通用户{% else %}管理员{% endifequal %}</p>
+                                    <p>{% ifequal request.user.is_staff 0 %}
+                                        {% ifequal request.user.is_teacher 0 %}
+                                            普通用户
+                                        {% else %}
+                                            讲师
+                                        {% endifequal %}
+                                    {% else %}
+                                        管理员
+                                    {% endifequal %}</p>
                                     <p>{{ request.user.email }}</p>
                                 </dd>
                             </dl>
@@ -73,7 +81,7 @@
     <div class="middle">
         <div class="wp">
             <a href="/"><img class="fl" src="/static/images/logo2.png"/></a>
-            <h1>我的悦耳网</h1>
+            {% block add %}<h1>我的悦耳网</h1>{% endblock %}
         </div>
     </div>
 			</div>
@@ -88,6 +96,7 @@
 {% endblock %}
 
 <section>
+    {% block lift_content %}
 	<div class="wp list personal_list">
 	<div class="left">
         <ul>
@@ -97,6 +106,7 @@
             <li {% if request.path|slice:'16' == '/users/mymessage' %}class="active2"{% endif %}><a href="{% url 'users:mymessage' %}" style="position: relative;">我的消息</a></li>
         </ul>
 	</div>
+    {% endblock %}
     {% block right_content %}
 
     {% endblock %}

@@ -1,7 +1,8 @@
 from django import forms
 from captcha.fields import CaptchaField
 
-from .models import UserProfile
+from .models import *
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)
@@ -34,3 +35,9 @@ class UserInfoForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['nick_name', 'birthday', 'gender', 'address', 'mobile']
+
+
+class AddCourseForm(forms.ModelForm):
+    class Meta:
+        model = AddCourse
+        exclude = ['add_time', 'is_add']
